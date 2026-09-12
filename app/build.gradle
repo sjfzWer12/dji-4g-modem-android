@@ -11,8 +11,8 @@ android {
         applicationId "com.example.dji4g"
         minSdk 26
         targetSdk 34
-        versionCode 26
-        versionName "2.6"
+        versionCode 37
+        versionName "3.7"
     }
 
     buildTypes {

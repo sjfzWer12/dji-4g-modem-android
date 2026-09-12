@@ -161,6 +161,7 @@ class MainActivity : Activity() {
         addButton("④ 联网 (Shizuku 配网)") { if (ensureShizuku()) connect() }
         addButton("🔍 网卡诊断(免Shizuku)") { diagInterfaces() }
         addButton("⑤ 一键全流程") { if (ensureShizuku()) fullFlow() }
+        addButton("🟢 一键联网(root)") { rootOneClick() }
         addButton("📋 复制全部日志") {
             val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             cm.setPrimaryClip(ClipData.newPlainText("log", logTv.text.toString()))
@@ -360,6 +361,10 @@ class MainActivity : Activity() {
             sb.append("未发现 USB 网卡\n${NetworkHelper.runShell("ip -o link show")}")
         }
         sb.toString()
+    }
+
+    private fun rootOneClick() = bg {
+        "=== 🟢 一键联网(root) ===\n" + NetworkHelper.rootOneClick()
     }
 
     override fun onDestroy() {

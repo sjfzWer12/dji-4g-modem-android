@@ -374,6 +374,28 @@ object NetworkHelper {
         return sb.toString()
     }
 
+    fun rootOneClick(): String {
+        val sb = StringBuilder()
+        val cmds = listOf(
+            "ip link set usb0 up",
+            "ip addr replace 192.168.225.2/24 dev usb0",
+            "ip route replace default via 192.168.225.1 dev usb0",
+            "setprop net.dns1 8.8.8.8",
+            "setprop net.dns2 114.114.114.114"
+        )
+        for (cmd in cmds) {
+            try {
+                val p = ProcessBuilder("su", "-c", cmd).redirectErrorStream(true).start()
+                val out = p.inputStream.bufferedReader().readText().trim()
+                val exit = p.waitFor()
+                sb.append("> $cmd\n  exit=$exit" + (if (out.isNotEmpty()) "\n  $out" else "") + "\n")
+            } catch (e: Throwable) {
+                sb.append("> $cmd\n  ❌ ${e.javaClass.simpleName}: ${e.message}\n")
+            }
+        }
+        return sb.toString()
+    }
+
     fun runShell(cmd: String): String {
         return try {
             // Shizuku 13.1.5 hides newProcess as private static; invoke via reflection.
